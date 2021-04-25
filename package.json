@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/vagnerolliver/api-image-coments/issues"
   },
-  "homepage": "https://github.com/vagnerolliver/api-image-coments#readme"
+  "homepage": "https://github.com/vagnerolliver/api-image-coments#readme",
+  "devDependencies": {
+    "git-commit-msg-linter": "^3.1.0"
+  }
 }
