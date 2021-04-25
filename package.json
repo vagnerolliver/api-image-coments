@@ -1,5 +1,5 @@
 {
-  "name": "api-feed-comments",
+  "name": "backend-image-feed",
   "version": "1.0.0",
   "description": "## Use Cases",
   "main": "index.js",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vagnerolliver/api-image-coments.git"
+    "url": "git+https://github.com/vagnerolliver/backend-image-feed.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vagnerolliver/api-image-coments/issues"
+    "url": "https://github.com/vagnerolliver/backend-image-feed/issues"
   },
-  "homepage": "https://github.com/vagnerolliver/api-image-coments#readme",
+  "homepage": "https://github.com/vagnerolliver/backend-image-feed#readme",
   "devDependencies": {
     "@types/jest": "^26.0.22",
     "@types/node": "^14.14.41",
