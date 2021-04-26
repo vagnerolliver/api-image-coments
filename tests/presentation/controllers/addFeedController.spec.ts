@@ -14,4 +14,17 @@ describe('AddFeedController', () => {
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('url'))
   })
+
+  test('Should return 400 if no description is provided', () => {
+    const sut = new AddFeedController()
+    const httpRequest = {
+      body: {
+        url: 'anything',
+        location: 'anything'
+      }
+    }
+    const httpResponse = sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new MissingParamError('description'))
+  })
 })

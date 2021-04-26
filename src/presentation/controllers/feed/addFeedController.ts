@@ -4,6 +4,11 @@ import { HttpRequest, HttpResponse } from '@/presentation/protocols/https'
 
 export class AddFeedController {
   handle (httpRequest: HttpRequest): HttpResponse {
-    return badRequest(new MissingParamError('url'))
+    const requiredFields = ['url', 'description']
+    for (const field of requiredFields) {
+      if (!httpRequest.body[field]) {
+        return badRequest(new MissingParamError(field))
+      }
+    }
   }
 }
