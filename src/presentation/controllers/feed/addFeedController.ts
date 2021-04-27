@@ -1,6 +1,6 @@
 import { MissingParamError } from '@/presentation/errors/missingParamError'
 import { badRequest } from '@/presentation/helpers/httpHelper'
-import { HttpRequest, HttpResponse } from '@/presentation/protocols/https'
+import { HttpRequest, HttpResponse } from '@/presentation/protocols/http'
 
 export class AddFeedController {
   handle (httpRequest: HttpRequest): HttpResponse {
