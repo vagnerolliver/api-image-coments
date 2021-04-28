@@ -2,6 +2,7 @@ import { UrlValidator } from '@/presentation/protocols/urlValidator'
 import { AddFeedController } from '@/presentation/controllers/feed/addFeedController'
 import { MissingParamError } from '@/presentation/errors/missingParamError'
 import { InvalidParamError } from '@/presentation/errors/invalidParamsErros'
+import { ServerError } from '@/presentation/errors/serverError'
 
 interface SutTypes {
   sut: AddFeedController
@@ -76,5 +77,25 @@ describe('AddFeedController', () => {
     }
     sut.handle(httpRequest)
     expect(isValidSpy).toHaveBeenCalledWith('https://image.png')
+  })
+
+  test('Should return 500 if UrlValidator throws', () => {
+    class UrlValidatorStub implements UrlValidator {
+      isValid (email: string): boolean {
+        throw new Error()
+      }
+    }
+    const emailValidatorStub = new UrlValidatorStub()
+    const sut = new AddFeedController(emailValidatorStub)
+    const httpRequest = {
+      body: {
+        url: 'anything',
+        location: 'anything',
+        description: 'anything'
+      }
+    }
+    const httpResponse = sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 })
