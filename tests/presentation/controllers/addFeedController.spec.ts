@@ -6,14 +6,18 @@ interface SutTypes {
   sut: AddFeedController
   urlValidatorStub: UrlValidator
 }
-const makeSut = (): SutTypes => {
-  class UrlValidatorStub implements UrlValidator {
+
+const makeUrlValidator = (): UrlValidator => {
+  class UrllValidatorStub implements UrlValidator {
     isValid (email: string): boolean {
       return true
     }
   }
+  return new UrllValidatorStub()
+}
 
-  const urlValidatorStub = new UrlValidatorStub()
+const makeSut = (): SutTypes => {
+  const urlValidatorStub = makeUrlValidator()
   const sut = new AddFeedController(urlValidatorStub)
   return {
     sut,
@@ -78,13 +82,10 @@ describe('AddFeedController', () => {
   })
 
   test('Should return 500 if UrlValidator throws', () => {
-    class UrlValidatorStub implements UrlValidator {
-      isValid (email: string): boolean {
-        throw new Error()
-      }
-    }
-    const emailValidatorStub = new UrlValidatorStub()
-    const sut = new AddFeedController(emailValidatorStub)
+    const { sut, urlValidatorStub } = makeSut()
+    jest.spyOn(urlValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error()
+    })
     const httpRequest = {
       body: {
         url: 'anything',
