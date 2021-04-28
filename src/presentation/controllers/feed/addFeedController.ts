@@ -1,10 +1,9 @@
-import { badRequest } from '@/presentation/helpers/httpHelper'
+import { badRequest, serverError } from '@/presentation/helpers/httpHelper'
 import { Controller } from '@/presentation/protocols/controller'
 import { HttpRequest, HttpResponse } from '@/presentation/protocols/http'
 import { UrlValidator } from '@/presentation/protocols/urlValidator'
 import { MissingParamError } from '@/presentation/errors/missingParamError'
 import { InvalidParamError } from '@/presentation/errors/invalidParamsErros'
-import { ServerError } from '@/presentation/errors/serverError'
 
 export class AddFeedController implements Controller {
   private readonly urlValidator: UrlValidator
@@ -29,10 +28,7 @@ export class AddFeedController implements Controller {
         return badRequest(new InvalidParamError('url'))
       }
     } catch (error) {
-      return {
-        statusCode: 500,
-        body: new ServerError()
-      }
+      return serverError()
     }
   }
 }
