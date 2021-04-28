@@ -63,4 +63,18 @@ describe('AddFeedController', () => {
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new InvalidParamError('url'))
   })
+
+  test('Should call UrlValidator with correct url', () => {
+    const { sut, urlValidatorStub } = makeSut()
+    const isValidSpy = jest.spyOn(urlValidatorStub, 'isValid')
+    const httpRequest = {
+      body: {
+        url: 'https://image.png',
+        location: 'anything',
+        description: 'anything'
+      }
+    }
+    sut.handle(httpRequest)
+    expect(isValidSpy).toHaveBeenCalledWith('https://image.png')
+  })
 })
