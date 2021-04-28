@@ -1,9 +1,13 @@
 import { AddFeedController } from '@/presentation/controllers/feed/addFeedController'
 import { MissingParamError } from '@/presentation/errors/missingParamError'
 
+const makeSut = (): AddFeedController => {
+  return new AddFeedController()
+}
+
 describe('AddFeedController', () => {
   test('Should return 400 if no url is provided', () => {
-    const sut = new AddFeedController()
+    const sut = makeSut()
     const httpRequest = {
       body: {
         description: 'anything',
@@ -16,7 +20,7 @@ describe('AddFeedController', () => {
   })
 
   test('Should return 400 if no description is provided', () => {
-    const sut = new AddFeedController()
+    const sut = makeSut()
     const httpRequest = {
       body: {
         url: 'anything',
