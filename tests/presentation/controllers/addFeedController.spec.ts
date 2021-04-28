@@ -1,8 +1,6 @@
 import { UrlValidator } from '@/presentation/protocols/urlValidator'
 import { AddFeedController } from '@/presentation/controllers/feed/addFeedController'
-import { MissingParamError } from '@/presentation/errors/missingParamError'
-import { InvalidParamError } from '@/presentation/errors/invalidParamsErros'
-import { ServerError } from '@/presentation/errors/serverError'
+import { MissingParamError, InvalidParamError, ServerError } from '@/presentation/errors'
 
 interface SutTypes {
   sut: AddFeedController
