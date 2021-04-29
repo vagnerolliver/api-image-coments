@@ -1,11 +1,8 @@
+import { FeedModel } from '@/domain/entities/feed'
+import { AddFeed, AddFeedModel } from '@/domain/usecases/addFeed'
 import { AddFeedController } from '@/presentation/controllers/feed/addFeedController'
 import { MissingParamError, InvalidParamError, ServerError } from '@/presentation/errors'
 import { UrlValidator } from '@/presentation/protocols'
-
-interface SutTypes {
-  sut: AddFeedController
-  urlValidatorStub: UrlValidator
-}
 
 const makeUrlValidator = (): UrlValidator => {
   class UrllValidatorStub implements UrlValidator {
@@ -16,12 +13,35 @@ const makeUrlValidator = (): UrlValidator => {
   return new UrllValidatorStub()
 }
 
+const makeAddFeed = (): AddFeed => {
+  class AddFeedStub implements AddFeed {
+    add (feed: AddFeedModel): FeedModel {
+      const fakeAccount = {
+        id: 'valid_id',
+        url: 'valid_url',
+        description: 'valid_description',
+        location: 'valid_location'
+      }
+      return fakeAccount
+    }
+  }
+  return new AddFeedStub()
+}
+
+interface SutTypes {
+  sut: AddFeedController
+  urlValidatorStub: UrlValidator
+  addFeedStub: AddFeed
+}
+
 const makeSut = (): SutTypes => {
   const urlValidatorStub = makeUrlValidator()
-  const sut = new AddFeedController(urlValidatorStub)
+  const addFeedStub = makeAddFeed()
+  const sut = new AddFeedController(urlValidatorStub, addFeedStub)
   return {
     sut,
-    urlValidatorStub
+    urlValidatorStub,
+    addFeedStub
   }
 }
 
@@ -96,5 +116,23 @@ describe('AddFeedController', () => {
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
+  })
+
+  test('Should call AddFeed with correct values', () => {
+    const { sut, addFeedStub } = makeSut()
+    const addSpy = jest.spyOn(addFeedStub, 'add')
+    const httpRequest = {
+      body: {
+        url: 'valid_url',
+        description: 'valid_description',
+        location: 'valid_location'
+      }
+    }
+    sut.handle(httpRequest)
+    expect(addSpy).toHaveBeenCalledWith({
+      url: 'valid_url',
+      description: 'valid_description',
+      location: 'valid_location'
+    })
   })
 })
