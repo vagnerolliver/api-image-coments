@@ -1,7 +1,7 @@
 {
   "name": "backend-image-feed",
   "version": "0.0.0",
-  "description": "Use Cases",
+  "description": "NodeJs Rest API using TDD, Clean Architecture and Typescript",
   "main": "index.js",
   "scripts": {
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
@@ -17,7 +17,7 @@
     "url": "git+https://github.com/vagnerolliver/backend-image-feed.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Vágner Silveira de Oliveira",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/vagnerolliver/backend-image-feed/issues"
