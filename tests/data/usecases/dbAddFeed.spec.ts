@@ -8,16 +8,34 @@ const makeFakeFeedData = (): AddFeedModel => ({
   location: 'valid_location'
 })
 
+const makeAddFeedRepository = (): AddFeedRepository => {
+  class AddFeedRepositoryStub implements AddFeedRepository {
+    async add (feedData: AddFeedModel): Promise<void> {
+      return await new Promise(resolve => resolve())
+    }
+  }
+  return new AddFeedRepositoryStub()
+}
+
+type SutTypes = {
+  sut: DbAddFeed
+  addFeedRepositoryStub: AddFeedRepository
+}
+
+const makeSut = (): SutTypes => {
+  const addFeedRepositoryStub = makeAddFeedRepository()
+  const sut = new DbAddFeed(addFeedRepositoryStub)
+
+  return {
+    sut,
+    addFeedRepositoryStub
+  }
+}
+
 describe('DbAddFeed Usecase', () => {
   test('Should call AddFeedRepository with correct values', async () => {
-    class AddFeedRepositoryStub implements AddFeedRepository {
-      async add (feedData: AddFeedModel): Promise<void> {
-        return await new Promise(resolve => resolve())
-      }
-    }
-    const addFeedRepositoryStub = new AddFeedRepositoryStub()
+    const { sut, addFeedRepositoryStub } = makeSut()
     const addSpy = jest.spyOn(addFeedRepositoryStub, 'add')
-    const sut = new DbAddFeed(addFeedRepositoryStub)
     const feedData = makeFakeFeedData()
     await sut.add(feedData)
     expect(addSpy).toHaveBeenCalledWith(feedData)
