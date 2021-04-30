@@ -1,6 +1,6 @@
 import { AddFeedController } from '@/presentation/controllers/feed/addFeedController'
 import { Validation, HttpRequest } from '@/presentation/protocols'
-import { badRequest, serverError } from '@/presentation/helpers/httpHelper'
+import { badRequest, serverError, noContent } from '@/presentation/helpers/httpHelper'
 import { AddFeed, AddFeedModel } from '@/domain/usecases/addFeed'
 
 const makeFakeRequest = (): HttpRequest => ({
@@ -76,5 +76,11 @@ describe('AddFeed Controller', () => {
     jest.spyOn(addFeedStub, 'add').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should return 204 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(noContent())
   })
 })
