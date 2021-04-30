@@ -28,11 +28,16 @@ export class AddFeedController implements Controller {
         return badRequest(new InvalidParamError('url'))
       }
 
-      this.addFeed.add({
+      const feed = this.addFeed.add({
         url,
         description,
         location
       })
+
+      return {
+        statusCode: 200,
+        body: feed
+      }
     } catch (error) {
       return serverError()
     }
