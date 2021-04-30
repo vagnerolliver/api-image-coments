@@ -135,4 +135,21 @@ describe('AddFeedController', () => {
       location: 'valid_location'
     })
   })
+
+  test('Should return 500 if addFeed throws', () => {
+    const { sut, addFeedStub } = makeSut()
+    jest.spyOn(addFeedStub, 'add').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const httpRequest = {
+      body: {
+        url: 'valid_url',
+        description: 'valid_description',
+        location: 'valid_location'
+      }
+    }
+    const httpResponse = sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
+  })
 })
