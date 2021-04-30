@@ -1,174 +1,27 @@
-import { FeedModel } from '@/domain/entities/feed'
-import { AddFeed, AddFeedModel } from '@/domain/usecases/addFeed'
 import { AddFeedController } from '@/presentation/controllers/feed/addFeedController'
-import { MissingParamError, InvalidParamError, ServerError } from '@/presentation/errors'
-import { UrlValidator } from '@/presentation/protocols'
+import { Validation, HttpRequest } from '@/presentation/protocols'
 
-const makeUrlValidator = (): UrlValidator => {
-  class UrllValidatorStub implements UrlValidator {
-    isValid (email: string): boolean {
-      return true
-    }
+const makeFakeRequest = (): HttpRequest => ({
+  body: {
+    id: 'valid_id',
+    url: 'valid_url',
+    description: 'valid_description',
+    location: 'valid_location'
   }
-  return new UrllValidatorStub()
-}
+})
 
-const makeAddFeed = (): AddFeed => {
-  class AddFeedStub implements AddFeed {
-    add (feed: AddFeedModel): FeedModel {
-      const fakeAccount = {
-        id: 'valid_id',
-        url: 'valid_url',
-        description: 'valid_description',
-        location: 'valid_location'
-      }
-      return fakeAccount
-    }
-  }
-  return new AddFeedStub()
-}
-
-interface SutTypes {
-  sut: AddFeedController
-  urlValidatorStub: UrlValidator
-  addFeedStub: AddFeed
-}
-
-const makeSut = (): SutTypes => {
-  const urlValidatorStub = makeUrlValidator()
-  const addFeedStub = makeAddFeed()
-  const sut = new AddFeedController(urlValidatorStub, addFeedStub)
-  return {
-    sut,
-    urlValidatorStub,
-    addFeedStub
-  }
-}
-
-describe('AddFeedController', () => {
-  test('Should return 400 if no url is provided', () => {
-    const { sut } = makeSut()
-    const httpRequest = {
-      body: {
-        description: 'anything',
-        location: 'anything'
+describe('AddSurvey Controller', () => {
+  test('Should call Validation with correct values', async () => {
+    class ValidationStub implements Validation {
+      validate (input: any): Error {
+        return null
       }
     }
-    const httpResponse = sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new MissingParamError('url'))
-  })
-
-  test('Should return 400 if no description is provided', () => {
-    const { sut } = makeSut()
-    const httpRequest = {
-      body: {
-        url: 'anything',
-        location: 'anything'
-      }
-    }
-    const httpResponse = sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new MissingParamError('description'))
-  })
-
-  test('Should return 400 if an invalid url is provided', () => {
-    const { sut, urlValidatorStub } = makeSut()
-    jest.spyOn(urlValidatorStub, 'isValid').mockReturnValueOnce(false)
-    const httpRequest = {
-      body: {
-        url: 'anything',
-        location: 'anything',
-        description: 'anything'
-      }
-    }
-    const httpResponse = sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new InvalidParamError('url'))
-  })
-
-  test('Should call UrlValidator with correct url', () => {
-    const { sut, urlValidatorStub } = makeSut()
-    const isValidSpy = jest.spyOn(urlValidatorStub, 'isValid')
-    const httpRequest = {
-      body: {
-        url: 'https://image.png',
-        location: 'anything',
-        description: 'anything'
-      }
-    }
-    sut.handle(httpRequest)
-    expect(isValidSpy).toHaveBeenCalledWith('https://image.png')
-  })
-
-  test('Should return 500 if UrlValidator throws', () => {
-    const { sut, urlValidatorStub } = makeSut()
-    jest.spyOn(urlValidatorStub, 'isValid').mockImplementationOnce(() => {
-      throw new Error()
-    })
-    const httpRequest = {
-      body: {
-        url: 'anything',
-        location: 'anything',
-        description: 'anything'
-      }
-    }
-    const httpResponse = sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new ServerError())
-  })
-
-  test('Should call AddFeed with correct values', () => {
-    const { sut, addFeedStub } = makeSut()
-    const addSpy = jest.spyOn(addFeedStub, 'add')
-    const httpRequest = {
-      body: {
-        url: 'valid_url',
-        description: 'valid_description',
-        location: 'valid_location'
-      }
-    }
-    sut.handle(httpRequest)
-    expect(addSpy).toHaveBeenCalledWith({
-      url: 'valid_url',
-      description: 'valid_description',
-      location: 'valid_location'
-    })
-  })
-
-  test('Should return 500 if addFeed throws', () => {
-    const { sut, addFeedStub } = makeSut()
-    jest.spyOn(addFeedStub, 'add').mockImplementationOnce(() => {
-      throw new Error()
-    })
-    const httpRequest = {
-      body: {
-        url: 'valid_url',
-        description: 'valid_description',
-        location: 'valid_location'
-      }
-    }
-    const httpResponse = sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new ServerError())
-  })
-
-  test('Should retu,rn 200 if valid data is provided', () => {
-    const { sut } = makeSut()
-    const httpRequest = {
-      body: {
-        url: 'valid_url',
-        description: 'valid_description',
-        location: 'valid_location'
-      }
-    }
-    const httpResponse = sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(200)
-    expect(httpResponse.body).toEqual({
-      id: 'valid_id',
-      url: 'valid_url',
-      description: 'valid_description',
-      location: 'valid_location'
-    })
+    const validationStub = new ValidationStub()
+    const validateSpy = jest.spyOn(validationStub, 'validate')
+    const sut = new AddFeedController(validationStub)
+    const httpRequest = makeFakeRequest()
+    await sut.handle(httpRequest)
+    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 })
