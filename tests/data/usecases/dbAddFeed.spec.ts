@@ -40,4 +40,11 @@ describe('DbAddFeed Usecase', () => {
     await sut.add(feedData)
     expect(addSpy).toHaveBeenCalledWith(feedData)
   })
+
+  test('Should throw if AddSurveyRepository throws', async () => {
+    const { sut, addFeedRepositoryStub } = makeSut()
+    jest.spyOn(addFeedRepositoryStub, 'add').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const promise = sut.add(makeFakeFeedData())
+    await expect(promise).rejects.toThrow()
+  })
 })
