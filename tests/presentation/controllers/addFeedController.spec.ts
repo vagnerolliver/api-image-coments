@@ -1,10 +1,10 @@
 import { AddFeedController } from '@/presentation/controllers/feed/addFeedController'
 import { Validation, HttpRequest } from '@/presentation/protocols'
 import { badRequest } from '@/presentation/helpers/httpHelper'
+import { AddFeed, AddFeedModel } from '@/domain/usecases/addFeed'
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
-    id: 'valid_id',
     url: 'valid_url',
     description: 'valid_description',
     location: 'valid_location'
@@ -20,17 +20,30 @@ const makeValidation = (): Validation => {
   return new ValidationStub()
 }
 
+const makeAddFeedStub = (): AddFeed => {
+  class AddFeedStub implements AddFeed {
+    async add (feed: AddFeedModel): Promise<void> {
+      return await new Promise(resolve => resolve())
+    }
+  }
+
+  return new AddFeedStub()
+}
+
 interface SutTypes {
   sut: AddFeedController
   validationStub: Validation
+  addFeedStub: AddFeed
 }
 
 const makeSut = (): SutTypes => {
   const validationStub = makeValidation()
-  const sut = new AddFeedController(validationStub)
+  const addFeedStub = makeAddFeedStub()
+  const sut = new AddFeedController(validationStub, addFeedStub)
   return {
     sut,
-    validationStub
+    validationStub,
+    addFeedStub
   }
 }
 
@@ -48,5 +61,13 @@ describe('AddFeed Controller', () => {
     jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new Error())
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(badRequest(new Error()))
+  })
+
+  test('Should call AddSurvey with correct values', async () => {
+    const { sut, addFeedStub } = makeSut()
+    const addSpy = jest.spyOn(addFeedStub, 'add')
+    const httpRequest = makeFakeRequest()
+    await sut.handle(httpRequest)
+    expect(addSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 })
