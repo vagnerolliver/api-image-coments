@@ -1,5 +1,5 @@
 import { AddFeed } from '@/domain/usecases/addFeed'
-import { badRequest } from '@/presentation/helpers/httpHelper'
+import { badRequest, serverError } from '@/presentation/helpers/httpHelper'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
 export class AddFeedController implements Controller {
   constructor (
@@ -8,16 +8,20 @@ export class AddFeedController implements Controller {
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    const error = this.validation.validate(httpRequest.body)
-    if (error) {
-      return badRequest(error)
+    try {
+      const error = this.validation.validate(httpRequest.body)
+      if (error) {
+        return badRequest(error)
+      }
+      const { url, location, description } = httpRequest.body
+      await this.addSurvey.add({
+        url,
+        location,
+        description
+      })
+      return await new Promise(resolve => resolve(null))
+    } catch (error) {
+      return serverError(error)
     }
-    const { url, location, description } = httpRequest.body
-    await this.addSurvey.add({
-      url,
-      location,
-      description
-    })
-    return await new Promise(resolve => resolve(null))
   }
 }
