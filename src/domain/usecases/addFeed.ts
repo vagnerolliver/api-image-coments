@@ -1,5 +1,3 @@
-import { FeedModel } from '@/domain/entities/feed'
-
 export interface AddFeedModel {
   url: string
   description?: string
@@ -7,5 +5,5 @@ export interface AddFeedModel {
 }
 
 export interface AddFeed {
-  add: (feed: AddFeedModel) => FeedModel
+  add: (feed: AddFeedModel) => Promise<void>
 }
