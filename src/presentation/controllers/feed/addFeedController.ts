@@ -1,5 +1,5 @@
 import { AddFeed } from '@/domain/usecases/addFeed'
-import { badRequest, serverError } from '@/presentation/helpers/httpHelper'
+import { badRequest, serverError, noContent } from '@/presentation/helpers/httpHelper'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
 export class AddFeedController implements Controller {
   constructor (
@@ -19,7 +19,7 @@ export class AddFeedController implements Controller {
         location,
         description
       })
-      return await new Promise(resolve => resolve(null))
+      return noContent()
     } catch (error) {
       return serverError(error)
     }
