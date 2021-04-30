@@ -1,7 +1,7 @@
 {
   "name": "backend-image-feed",
   "version": "0.0.0",
-  "description": "Use Cases 1",
+  "description": "Use Cases",
   "main": "index.js",
   "scripts": {
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
