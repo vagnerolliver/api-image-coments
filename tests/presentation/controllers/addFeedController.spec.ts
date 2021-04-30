@@ -1,4 +1,4 @@
-import { AddFeedController } from '@/presentation/controllers/feed/addFeedController'
+import { AddFeedController } from '@/presentation/controllers/addFeedController'
 import { Validation, HttpRequest } from '@/presentation/protocols'
 import { badRequest, serverError, noContent } from '@/presentation/helpers/httpHelper'
 import { AddFeed, AddFeedModel } from '@/domain/usecases/addFeed'
