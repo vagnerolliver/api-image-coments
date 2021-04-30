@@ -1,6 +1,6 @@
 import { AddFeedController } from '@/presentation/controllers/feed/addFeedController'
 import { Validation, HttpRequest } from '@/presentation/protocols'
-import { badRequest } from '@/presentation/helpers/httpHelper'
+import { badRequest, serverError } from '@/presentation/helpers/httpHelper'
 import { AddFeed, AddFeedModel } from '@/domain/usecases/addFeed'
 
 const makeFakeRequest = (): HttpRequest => ({
@@ -69,5 +69,12 @@ describe('AddFeed Controller', () => {
     const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
     expect(addSpy).toHaveBeenCalledWith(httpRequest.body)
+  })
+
+  test('Should return 500 if AddSurvey throws', async () => {
+    const { sut, addFeedStub } = makeSut()
+    jest.spyOn(addFeedStub, 'add').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 })
