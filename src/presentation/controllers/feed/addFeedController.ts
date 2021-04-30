@@ -1,4 +1,4 @@
-import { badRequest, serverError } from '@/presentation/helpers/httpHelper'
+import { badRequest, serverError, ok } from '@/presentation/helpers/httpHelper'
 import { Controller, HttpRequest, HttpResponse, UrlValidator } from '@/presentation/protocols'
 import { MissingParamError, InvalidParamError } from '@/presentation/errors'
 import { AddFeed } from '@/domain/usecases/addFeed'
@@ -34,10 +34,7 @@ export class AddFeedController implements Controller {
         location
       })
 
-      return {
-        statusCode: 200,
-        body: feed
-      }
+      return ok(feed)
     } catch (error) {
       return serverError()
     }
