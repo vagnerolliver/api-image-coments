@@ -1,42 +1,9 @@
-import { badRequest, serverError, ok } from '@/presentation/helpers/httpHelper'
-import { Controller, HttpRequest, HttpResponse, UrlValidator } from '@/presentation/protocols'
-import { MissingParamError, InvalidParamError } from '@/presentation/errors'
-import { AddFeed } from '@/domain/usecases/addFeed'
-
+import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
 export class AddFeedController implements Controller {
-  private readonly urlValidator: UrlValidator
-  private readonly addFeed: AddFeed
+  constructor (private readonly validation: Validation) {}
 
-  constructor (urlValidator: UrlValidator, addFeed: AddFeed) {
-    this.urlValidator = urlValidator
-    this.addFeed = addFeed
-  }
-
-  handle (httpRequest: HttpRequest): HttpResponse {
-    try {
-      const requiredFields = ['url', 'description']
-      for (const field of requiredFields) {
-        if (!httpRequest.body[field]) {
-          return badRequest(new MissingParamError(field))
-        }
-      }
-
-      const { url, description, location } = httpRequest.body
-
-      const isValid = this.urlValidator.isValid(url)
-      if (!isValid) {
-        return badRequest(new InvalidParamError('url'))
-      }
-
-      const feed = this.addFeed.add({
-        url,
-        description,
-        location
-      })
-
-      return ok(feed)
-    } catch (error) {
-      return serverError()
-    }
+  async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
+    this.validation.validate(httpRequest.body)
+    return await new Promise(resolve => resolve(null))
   }
 }
