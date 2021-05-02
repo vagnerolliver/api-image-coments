@@ -11,6 +11,8 @@ services:
   api:
     container_name: api-container
     build: .
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/backend-image-feed
     image: backend-image-feed
     restart: always
     command: npm start
