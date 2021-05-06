@@ -16,7 +16,8 @@
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
     "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
-    "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged",
+    "heroku-postbuild": "npm run build"
   },
   "repository": {
     "type": "git",
