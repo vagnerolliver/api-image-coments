@@ -38,7 +38,7 @@ describe('DbAddFeed Usecase', () => {
     const addSpy = jest.spyOn(addFeedRepositoryStub, 'add')
     const feedData = makeFakeFeedData()
     await sut.add(feedData)
-    expect(addSpy).toHaveBeenCalledWith(feedData)
+    expect(addSpy).toHaveBeenCalledWith('breaking-deploy')
   })
 
   test('Should throw if AddSurveyRepository throws', async () => {
