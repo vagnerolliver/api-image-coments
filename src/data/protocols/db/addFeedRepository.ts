@@ -1,5 +1,5 @@
-import { AddFeedModel } from '@/domain/usecases/addFeed'
+import { AddFeed } from '@/domain/usecases/addFeed'
 
 export interface AddFeedRepository {
-  add: (feedData: AddFeedModel) => Promise<void>
+  add: (feedData: AddFeed.Params) => Promise<void>
 }

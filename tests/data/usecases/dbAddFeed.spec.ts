@@ -1,8 +1,8 @@
-import { AddFeedModel } from '@/domain/usecases/addFeed'
+import { AddFeed } from '@/domain/usecases/addFeed'
 import { AddFeedRepository } from '@/data/protocols/db/addFeedRepository'
 import { DbAddFeed } from '@/data/usecases/dbAddFeed'
 
-const makeFakeFeedData = (): AddFeedModel => ({
+const makeFakeFeedData = (): AddFeed.Params => ({
   url: 'valid_url',
   description: 'valid_description',
   location: 'valid_location'
@@ -10,7 +10,7 @@ const makeFakeFeedData = (): AddFeedModel => ({
 
 const makeAddFeedRepository = (): AddFeedRepository => {
   class AddFeedRepositoryStub implements AddFeedRepository {
-    async add (feedData: AddFeedModel): Promise<void> {
+    async add (feedData: AddFeed.Params): Promise<void> {
       return await new Promise(resolve => resolve())
     }
   }

@@ -1,7 +1,7 @@
 import { AddFeedController } from '@/presentation/controllers/addFeedController'
 import { Validation, HttpRequest } from '@/presentation/protocols'
 import { badRequest, serverError, noContent } from '@/presentation/helpers/httpHelper'
-import { AddFeed, AddFeedModel } from '@/domain/usecases/addFeed'
+import { AddFeed } from '@/domain/usecases/addFeed'
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -22,7 +22,7 @@ const makeValidation = (): Validation => {
 
 const makeAddFeedStub = (): AddFeed => {
   class AddFeedStub implements AddFeed {
-    async add (feed: AddFeedModel): Promise<void> {
+    async add (feed: AddFeed.Params): Promise<void> {
       return await new Promise(resolve => resolve())
     }
   }

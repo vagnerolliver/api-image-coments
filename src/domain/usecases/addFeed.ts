@@ -1,9 +1,9 @@
-export interface AddFeedModel {
-  url: string
-  description?: string
-  location?: string
-}
+import { FeedModel } from '@/domain/models/feed'
 
 export interface AddFeed {
-  add: (feed: AddFeedModel) => Promise<void>
+  add: (feed: AddFeed.Params) => Promise<void>
+}
+
+export namespace AddFeed {
+  export type Params = Omit<FeedModel, 'id'>
 }
