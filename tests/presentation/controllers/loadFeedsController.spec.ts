@@ -1,7 +1,7 @@
 import { FeedModel } from '@/domain/models/feed'
 import { LoadFeeds } from '@/domain/usecases/loadFeeds'
 import { LoadFeedsController } from '@/presentation/controllers/loadFeedsController'
-import { ok, serverError } from '@/presentation/helpers'
+import { ok, serverError, noContent } from '@/presentation/helpers'
 
 const makeFakeFeed = (): FeedModel[] => {
   return [
@@ -55,6 +55,13 @@ describe('LoadFeedsController', () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle()
     expect(httpResponse).toEqual(ok(makeFakeFeed()))
+  })
+
+  test('Should return 204 if there is no content', async () => {
+    const { sut, loadsFeedStub } = makeSut()
+    jest.spyOn(loadsFeedStub, 'load').mockReturnValueOnce(new Promise((resolve) => resolve([])))
+    const httpResponse = await sut.handle()
+    expect(httpResponse).toEqual(noContent())
   })
 
   test('Should return 500 if LoadFeeds throws', async () => {
