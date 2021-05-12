@@ -1,5 +1,5 @@
 import { AddFeed } from '@/domain/usecases/addFeed'
-import { badRequest, serverError, noContent } from '@/presentation/helpers/httpHelper'
+import { badRequest, serverError, noContent } from '@/presentation/helpers'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
 export class AddFeedController implements Controller {
   constructor (

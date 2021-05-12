@@ -1,6 +1,6 @@
 import { AddFeedController } from '@/presentation/controllers/addFeedController'
 import { Validation, HttpRequest } from '@/presentation/protocols'
-import { badRequest, serverError, noContent } from '@/presentation/helpers/httpHelper'
+import { badRequest, serverError, noContent } from '@/presentation/helpers'
 import { AddFeed } from '@/domain/usecases/addFeed'
 
 const makeFakeRequest = (): HttpRequest => ({
