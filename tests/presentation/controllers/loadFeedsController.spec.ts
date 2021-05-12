@@ -1,7 +1,7 @@
 import { FeedModel } from '@/domain/models/feed'
 import { LoadFeeds } from '@/domain/usecases/loadFeeds'
-import { LoadFeedController } from '@/presentation/controllers/loadFeedController'
-import { ok } from '@/presentation/helpers'
+import { LoadFeedsController } from '@/presentation/controllers/loadFeedsController'
+import { ok, serverError } from '@/presentation/helpers'
 
 const makeFakeFeed = (): FeedModel[] => {
   return [
@@ -30,23 +30,23 @@ const makeLoadFeed = (): LoadFeeds => {
 }
 
 type SutTypes = {
-  sut: LoadFeedController
-  loadFeedStub: LoadFeeds
+  sut: LoadFeedsController
+  loadsFeedStub: LoadFeeds
 }
 
 const makeSut = (): SutTypes => {
-  const loadFeedStub = makeLoadFeed()
-  const sut = new LoadFeedController(loadFeedStub)
+  const loadsFeedStub = makeLoadFeed()
+  const sut = new LoadFeedsController(loadsFeedStub)
   return {
     sut,
-    loadFeedStub
+    loadsFeedStub
   }
 }
 
-describe('LoadFeedController', () => {
+describe('LoadFeedsController', () => {
   test('Should calls LoadFeeds usecase', async () => {
-    const { sut, loadFeedStub } = makeSut()
-    const addSpy = jest.spyOn(loadFeedStub, 'load')
+    const { sut, loadsFeedStub } = makeSut()
+    const addSpy = jest.spyOn(loadsFeedStub, 'load')
     await sut.handle()
     expect(addSpy).toHaveBeenCalled()
   })
@@ -55,5 +55,12 @@ describe('LoadFeedController', () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle()
     expect(httpResponse).toEqual(ok(makeFakeFeed()))
+  })
+
+  test('Should return 500 if LoadFeeds throws', async () => {
+    const { sut, loadsFeedStub } = makeSut()
+    jest.spyOn(loadsFeedStub, 'load').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const httpResponse = await sut.handle()
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 })
