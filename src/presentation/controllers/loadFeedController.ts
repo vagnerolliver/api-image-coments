@@ -1,9 +1,10 @@
-import { LoadFeed } from '@/domain/usecases/loadFeed'
+import { loadFeeds } from '@/domain/usecases/loadFeeds'
 import { Controller, HttpResponse } from '@/presentation/protocols'
+import { ok } from '@/presentation/helpers'
 export class LoadFeedController implements Controller {
-  constructor (private readonly loadFeed: LoadFeed) {}
+  constructor (private readonly LoadFeeds: loadFeeds) {}
   async handle (): Promise<HttpResponse> {
-    await this.loadFeed.load()
-    return null
+    const feeds = await this.LoadFeeds.load()
+    return ok(feeds)
   }
 }
