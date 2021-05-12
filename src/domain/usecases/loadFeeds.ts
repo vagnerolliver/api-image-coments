@@ -1,5 +1,5 @@
 import { FeedModel } from '@/domain/models/feed'
 
-export interface loadFeeds {
+export interface LoadFeeds {
   load: () => Promise<FeedModel[]>
 }
