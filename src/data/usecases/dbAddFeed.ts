@@ -1,5 +1,5 @@
 import { AddFeed } from '@/domain/usecases/addFeed'
-import { AddFeedRepository } from '@/data/protocols/db/addFeedRepository'
+import { AddFeedRepository } from '@/data/protocols/db'
 
 export class DbAddFeed implements AddFeed {
   constructor (private readonly addFeedRepository: AddFeedRepository) {}

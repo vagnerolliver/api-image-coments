@@ -1,6 +1,6 @@
 import { AddFeed } from '@/domain/usecases/addFeed'
-import { AddFeedRepository } from '@/data/protocols/db/addFeedRepository'
-import { DbAddFeed } from '@/data/usecases/dbAddFeed'
+import { AddFeedRepository } from '@/data/protocols/db'
+import { DbAddFeed } from '@/data/usecases'
 
 const makeFakeFeedData = (): AddFeed.Params => ({
   url: 'valid_url',
