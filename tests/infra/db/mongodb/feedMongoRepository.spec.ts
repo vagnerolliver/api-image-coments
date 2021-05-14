@@ -22,14 +22,16 @@ describe('Survey Mongo Repository', () => {
     await feedCollection.deleteMany({})
   })
 
-  test('Should add a feed on success', async () => {
-    const sut = makeSut()
-    await sut.add({
-      url: 'valid_url',
-      description: 'valid_description',
-      location: 'valid_location'
+  describe('add()', () => {
+    test('Should add a feed on success', async () => {
+      const sut = makeSut()
+      await sut.add({
+        url: 'valid_url',
+        description: 'valid_description',
+        location: 'valid_location'
+      })
+      const feed = await feedCollection.findOne({ url: 'valid_url' })
+      expect(feed).toBeTruthy()
     })
-    const feed = await feedCollection.findOne({ url: 'valid_url' })
-    expect(feed).toBeTruthy()
   })
 })
