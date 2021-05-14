@@ -1,7 +1,6 @@
 import { FeedModel } from '@/domain/models/feed'
 import { LoadFeedsRepository } from '@/data/protocols/db'
 import { DbLoadFeeds } from '@/data/usecases/dbLoadFeeds'
-import { ok } from '@/presentation/helpers'
 
 const makeFakeFeeds = (): FeedModel[] => {
   return [
