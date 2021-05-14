@@ -18,7 +18,7 @@ describe('Survey Mongo Repository', () => {
   })
 
   beforeEach(async () => {
-    feedCollection = await MongoHelper.getCollection('feed')
+    feedCollection = await MongoHelper.getCollection('feeds')
     await feedCollection.deleteMany({})
   })
 
@@ -32,6 +32,26 @@ describe('Survey Mongo Repository', () => {
       })
       const feed = await feedCollection.findOne({ url: 'valid_url' })
       expect(feed).toBeTruthy()
+    })
+  })
+
+  describe('loadAll()', () => {
+    test('Should load all surveys on success', async () => {
+      await feedCollection.insertMany([{
+        url: 'any_url',
+        description: 'any_description',
+        location: 'any_location'
+      }, {
+        url: 'other_url',
+        description: 'other_description',
+        location: 'other_location'
+      }])
+
+      const sut = makeSut()
+      const feeds = await sut.loadAll()
+      expect(feeds.length).toBe(2)
+      expect(feeds[0].url).toBe('any_url')
+      expect(feeds[1].url).toBe('other_url')
     })
   })
 })
