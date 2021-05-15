@@ -53,5 +53,11 @@ describe('Survey Mongo Repository', () => {
       expect(feeds[0].url).toBe('any_url')
       expect(feeds[1].url).toBe('other_url')
     })
+
+    test('Should load empty list', async () => {
+      const sut = makeSut()
+      const feeds = await sut.loadAll()
+      expect(feeds.length).toBe(0)
+    })
   })
 })
