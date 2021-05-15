@@ -31,4 +31,18 @@ describe('Feed Routes', () => {
         .expect(204)
     })
   })
+
+  describe('GET /feeds', () => {
+    test('Should return 200 and load all feeds', async () => {
+      await feedCollection.insertMany([{
+        url: 'any_url',
+        description: 'any_description',
+        location: 'any_location'
+      }])
+
+      await request(app)
+        .get('/api/feeds')
+        .expect(200)
+    })
+  })
 })
