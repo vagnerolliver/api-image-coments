@@ -1,7 +1,7 @@
 {
   "name": "backend-image-feed",
   "version": "1.2.0",
-  "description": "NodeJs Rest API using TDD, Clean Architecture and Typescript.",
+  "description": "NodeJs Rest API using TDD, Clean Architecture and Typescript",
   "main": "index.js",
   "scripts": {
     "start": "node dist/main/server.js",
