@@ -19,10 +19,10 @@ describe('Feed Routes', () => {
     await feedCollection.deleteMany({})
   })
 
-  describe('POST /feed', () => {
+  describe('POST /feeds', () => {
     test('Should return 204 on add feed success', async () => {
       await request(app)
-        .post('/api/feed')
+        .post('/api/feeds')
         .send({
           url: 'valid_url',
           description: 'valid_description',
