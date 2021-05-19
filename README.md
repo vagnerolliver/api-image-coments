@@ -1,5 +1,5 @@
 # Feed image with comments
-[![Build Status](https://www.travis-ci.com/vagnerolliver/my-clean-react.svg?branch=main)](https://www.travis-ci.com/vagnerolliver/my-clean-react)
+[![Build Status](https://www.travis-ci.com/vagnerolliver/backend-image-feed.svg?branch=main)](https://www.travis-ci.com/vagnerolliver/backend-image-feed)
 [![Coverage Status](https://coveralls.io/repos/github/vagnerolliver/backend-image-feed/badge.svg?branch=main)](https://coveralls.io/github/vagnerolliver/backend-image-feed?branch=main)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
