@@ -1,4 +1,4 @@
-import { FeedModel } from '@/domain/models/feed'
+import { FeedModel } from '@/domain/models'
 import { LoadFeeds } from '@/domain/usecases/loadFeeds'
 import { LoadFeedsController } from '@/presentation/controllers/loadFeedsController'
 import { ok, serverError, noContent } from '@/presentation/helpers'

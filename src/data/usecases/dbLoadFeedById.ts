@@ -1,6 +1,6 @@
-import { LoadFeedByIdRepository } from '@/data/protocols/db/loadFeedById'
-import { FeedModel } from '@/domain/models/feed'
-import { LoadFeedById } from '@/domain/usecases/loadFeedById'
+import { LoadFeedByIdRepository } from '@/data/protocols/db'
+import { FeedModel } from '@/domain/models'
+import { LoadFeedById } from '@/domain/usecases'
 
 export class DbLoadFeedById implements LoadFeedById {
   constructor (private readonly loadFeedByIdRepository: LoadFeedByIdRepository) {}

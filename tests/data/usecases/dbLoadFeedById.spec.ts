@@ -1,7 +1,7 @@
-import { DbLoadFeedById } from '@/data/usecases/dbLoadFeedById';
-import { LoadFeedByIdRepository } from '@/data/protocols/db/loadFeedById'
+import { DbLoadFeedById } from '@/data/usecases'
+import { LoadFeedByIdRepository } from '@/data/protocols/db'
 
-import { FeedModel } from '@/domain/models/feed'
+import { FeedModel } from '@/domain/models'
 
 const makeFakeFeed = (): FeedModel => {
   return {

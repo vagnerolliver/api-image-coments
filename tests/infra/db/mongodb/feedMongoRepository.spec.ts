@@ -1,5 +1,5 @@
 import { FeedMongoRepository } from '@/infra/db/mongodb/feedMongoRepository'
-import { MongoHelper } from '@/infra/db/mongodb/mongoHelper'
+import { MongoHelper } from '@/infra/db/mongodb'
 import { Collection } from 'mongodb'
 
 let feedCollection: Collection

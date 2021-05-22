@@ -1,4 +1,4 @@
-import { FeedModel } from '@/domain/models/feed'
+import { FeedModel } from '@/domain/models'
 import { LoadFeedsRepository } from '@/data/protocols/db'
 import { DbLoadFeeds } from '@/data/usecases/dbLoadFeeds'
 

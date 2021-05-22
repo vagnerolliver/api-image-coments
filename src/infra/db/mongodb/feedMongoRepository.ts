@@ -1,7 +1,7 @@
-import { MongoHelper } from '@/infra/db/mongodb/mongoHelper'
+import { MongoHelper } from '@/infra/db/mongodb'
 import { AddFeedRepository, LoadFeedsRepository } from '@/data/protocols/db'
 import { AddFeed } from '@/domain/usecases'
-import { FeedModel } from '@/domain/models/feed'
+import { FeedModel } from '@/domain/models'
 
 export class FeedMongoRepository implements AddFeedRepository, LoadFeedsRepository {
   async add (feedData: AddFeed.Params): Promise<void> {

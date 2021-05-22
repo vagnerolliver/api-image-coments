@@ -1,4 +1,4 @@
-import { FeedResultModel } from '@/domain/models/feedResult'
+import { FeedResultModel } from '@/domain/models'
 
 export type SaveFeedResultModel = Omit<FeedResultModel, 'id'>
 
