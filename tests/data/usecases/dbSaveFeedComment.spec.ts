@@ -1,0 +1,56 @@
+import { FeedCommentModel } from '@/domain/models'
+import { SaveFeedCommentModel } from '@/domain/usecases'
+import MockDate from 'mockdate'
+import { SaveFeedCommentRepository } from '@/data/protocols/db'
+import { DbSaveFeedComment } from '@/data/usecases'
+
+const makeFakeFeedComment = (): FeedCommentModel => {
+  return {
+    id: 'any_id',
+    feedId: 'any_feedId',
+    message: 'any_message',
+    date: new Date()
+  }
+}
+
+const makeSaveFeedCommentStub = (): SaveFeedCommentRepository => {
+  class SaveFeedCommentStub implements SaveFeedCommentRepository {
+    async save (data: SaveFeedCommentModel): Promise<FeedCommentModel> {
+      return new Promise(resolve => resolve(makeFakeFeedComment()))
+    }
+  }
+  return new SaveFeedCommentStub()
+}
+
+type SutTypes = {
+  sut: DbSaveFeedComment
+  saveFeedCommentRepositoryStub: SaveFeedCommentRepository
+}
+
+const makeSut = (): SutTypes => {
+  const saveFeedCommentRepositoryStub = makeSaveFeedCommentStub()
+  const sut = new DbSaveFeedComment(saveFeedCommentRepositoryStub)
+
+  return {
+    sut,
+    saveFeedCommentRepositoryStub
+  }
+}
+
+describe('DbSaveFeedComment Usecase', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+
+  afterAll(() => {
+    MockDate.reset()
+  })
+
+  test('Should call SaveFeedCommentRepository with correct values', async () => {
+    const { sut, saveFeedCommentRepositoryStub } = makeSut()
+    const saveSpy = jest.spyOn(saveFeedCommentRepositoryStub, 'save')
+    const feeddCommentData = makeFakeFeedComment()
+    await sut.save(feeddCommentData)
+    expect(saveSpy).toHaveBeenCalledWith(feeddCommentData)
+  })
+})
