@@ -1,7 +1,7 @@
 import { FeedCommentModel } from '@/domain/models'
 
-export type SaveFeedResultModel = Omit<FeedCommentModel, 'id'>
+export type SaveFeedCommentModel = Omit<FeedCommentModel, 'id'>
 
-export interface SaveFeedResult {
-  save: (data: SaveFeedResultModel) => Promise<FeedCommentModel>
+export interface SaveFeedComment {
+  save: (data: SaveFeedCommentModel) => Promise<FeedCommentModel>
 }
