@@ -56,6 +56,6 @@
 | Property      | Type                    |
 |---------------|-------------------------|
 | `id`          | `UUID`                  |
-| `imageId`     | `UUID`                  |
+| `FeedId`     | `UUID`                  |
 | `message`     | `String`                |
 | `created_at`  | `Date` (ISO8601 String) |
