@@ -1,5 +1,4 @@
 export * from './addFeed'
 export * from './loadFeeds'
 export * from './loadFeedById'
-export * from './saveFeedResult'
 export * from './saveFeedComment'
