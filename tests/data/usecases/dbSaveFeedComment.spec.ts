@@ -53,4 +53,11 @@ describe('DbSaveFeedComment Usecase', () => {
     await sut.save(feeddCommentData)
     expect(saveSpy).toHaveBeenCalledWith(feeddCommentData)
   })
+
+  test('Should throw if SaveFeedCommentRepository throws', async () => {
+    const { sut, saveFeedCommentRepositoryStub } = makeSut()
+    jest.spyOn(saveFeedCommentRepositoryStub, 'save').mockRejectedValueOnce(new Error())
+    const promise = sut.save(makeFakeFeedComment())
+    await expect(promise).rejects.toThrow()
+  })
 })

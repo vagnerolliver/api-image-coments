@@ -52,7 +52,7 @@ describe('DbLoadFeedById', () => {
 
   test('Should throw if LoadFeedByIdRepository throws', async () => {
     const { sut, loadFeedByIdRepositoryStub } = makeSut()
-    jest.spyOn(loadFeedByIdRepositoryStub, 'loadById').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    jest.spyOn(loadFeedByIdRepositoryStub, 'loadById').mockRejectedValueOnce(new Error())
     const promise = sut.loadById('any_id')
     await expect(promise).rejects.toThrow()
   })
