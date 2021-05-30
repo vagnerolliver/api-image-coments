@@ -6,9 +6,8 @@ import { SaveFeedCommentRepository } from '@/data/protocols/db/saveFeedCommentRe
 export class FeedCommentRepository implements SaveFeedCommentRepository {
   async save (data: SaveFeedCommentModel): Promise<FeedCommentModel> {
     const feedCommentCollection = await MongoHelper.getCollection('feedComment')
-
     const res = await feedCommentCollection.findOneAndUpdate({
-      surveyId: data.feedId
+      feedId: data.feedId
     }, {
       $set: {
         message: data.message,

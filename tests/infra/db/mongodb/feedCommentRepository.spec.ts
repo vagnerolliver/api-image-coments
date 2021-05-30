@@ -31,12 +31,12 @@ describe('Survey Mongo Repository', () => {
     feedCollection = await MongoHelper.getCollection('feeds')
     await feedCollection.deleteMany({})
 
-    feedCommentCollection = await MongoHelper.getCollection('feedComments')
+    feedCommentCollection = await MongoHelper.getCollection('feedComment')
     await feedCommentCollection.deleteMany({})
   })
 
   describe('save()', () => {
-    test('Should add a survey result if its new', async () => {
+    test('Should add a feed comment if its new', async () => {
       const feed = await makeFakeFeed()
       const sut = makeSut()
       const feedComment = await sut.save({
@@ -46,6 +46,24 @@ describe('Survey Mongo Repository', () => {
       })
       expect(feedComment).toBeTruthy()
       expect(feedComment.id).toBeTruthy()
+    })
+
+    test('Should update a feed coment if its not new', async () => {
+      const feed = await makeFakeFeed()
+      const res = await feedCommentCollection.insertOne({
+        feedId: feed.id,
+        message: 'any_message',
+        date: new Date()
+      })
+      const sut = makeSut()
+      const feedComment = await sut.save({
+        feedId: feed.id,
+        message: 'other_message',
+        date: new Date()
+      })
+      expect(feedComment).toBeTruthy()
+      expect(feedComment.id).toEqual(res.ops[0]._id)
+      expect(feedComment.message).toBe('other_message')
     })
   })
 })
