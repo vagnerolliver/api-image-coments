@@ -12,12 +12,12 @@ export class FeedMongoRepository implements AddFeedRepository, LoadFeedsReposito
   async loadAll (): Promise<FeedModel[]> {
     const feedCollection = await MongoHelper.getCollection('feeds')
     const feeds: FeedModel[] = await feedCollection.find().toArray()
-    return feeds
+    return MongoHelper.mapCollection(feeds)
   }
 
   async loadById (id: string): Promise<FeedModel> {
     const feedCollection = await MongoHelper.getCollection('feeds')
     const feed: FeedModel = await feedCollection.findOne({ _id: id })
-    return feed
+    return feed && MongoHelper.map(feed)
   }
 }
