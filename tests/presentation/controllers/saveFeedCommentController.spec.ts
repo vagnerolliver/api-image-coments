@@ -1,5 +1,5 @@
-import { forbidden, serverError } from '@/presentation/helpers/httpHelper'
-import { InvalidParamError } from '@/presentation/errors'
+import { forbidden, serverError, missing } from '@/presentation/helpers/httpHelper'
+import { InvalidParamError, MissingParamError } from '@/presentation/errors'
 import { SaveFeedCommentController } from '@/presentation/controllers/saveFeedCommentController'
 import { LoadFeedById } from '@/domain/usecases'
 import { HttpRequest } from '@/presentation/protocols'
@@ -12,6 +12,9 @@ const makeSaveFeedCommentController = (loadFeedById: LoadFeedById): SaveFeedComm
 const makeFakeRequest = (): HttpRequest => ({
   params: {
     feedId: 'any_feed_id'
+  },
+  body: {
+    url: 'any_url'
   }
 })
 
@@ -66,5 +69,18 @@ describe('SaveFeedCommment Controller', () => {
     jest.spyOn(loadFeedByIdStub, 'loadById').mockRejectedValueOnce(new Error())
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should return 403 if an invalid message is provided', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle({
+      params: {
+        feedId: 'any_feed_id'
+      },
+      body: {
+        url: null
+      }
+    })
+    expect(httpResponse).toEqual(missing(new MissingParamError('url')))
   })
 })
