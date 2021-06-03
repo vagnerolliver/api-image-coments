@@ -1,3 +1,5 @@
+import { forbidden } from '@/presentation/helpers/httpHelper'
+import { InvalidParamError } from '@/presentation/errors'
 import { SaveFeedCommentController } from '@/presentation/controllers/saveFeedCommentController'
 import { LoadFeedById } from '@/domain/usecases'
 import { HttpRequest } from '@/presentation/protocols'
@@ -49,5 +51,12 @@ describe('SaveFeedCommment Controller', () => {
     const loadByIdSpy = jest.spyOn(loadFeedByIdStub, 'loadById')
     await sut.handle(makeFakeRequest())
     expect(loadByIdSpy).toHaveBeenCalledWith('any_feed_id')
+  })
+
+  test('Should return 403 if LoadFeedById returns null', async () => {
+    const { sut, loadFeedByIdStub } = makeSut()
+    jest.spyOn(loadFeedByIdStub, 'loadById').mockReturnValueOnce(new Promise(resolve => resolve(null)))
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(forbidden(new InvalidParamError('feedId')))
   })
 })
