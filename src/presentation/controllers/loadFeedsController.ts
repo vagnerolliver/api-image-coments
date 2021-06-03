@@ -1,4 +1,4 @@
-import { LoadFeeds } from '@/domain/usecases/loadFeeds'
+import { LoadFeeds } from '@/domain/usecases'
 import { Controller, HttpResponse } from '@/presentation/protocols'
 import { ok, serverError, noContent } from '@/presentation/helpers'
 export class LoadFeedsController implements Controller {
