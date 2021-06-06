@@ -1,10 +1,13 @@
 import { InvalidParamError, MissingParamError } from '@/presentation/errors'
 import { forbidden, missing, serverError } from '@/presentation/helpers'
-import { LoadFeedById } from '@/domain/usecases'
+import { LoadFeedById, SaveFeedComment } from '@/domain/usecases'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 
 export class SaveFeedCommentController implements Controller {
-  constructor (private readonly loadFeedById: LoadFeedById) {}
+  constructor (
+    private readonly loadFeedById: LoadFeedById,
+    private readonly saveFeedComment: SaveFeedComment
+  ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
@@ -18,6 +21,12 @@ export class SaveFeedCommentController implements Controller {
       } else {
         return forbidden(new InvalidParamError('feedId'))
       }
+
+      await this.saveFeedComment.save({
+        feedId,
+        message,
+        date: new Date()
+      })
     } catch (error) {
       return serverError(error)
     }
