@@ -9,11 +9,11 @@ export class SaveFeedCommentController implements Controller {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const { feedId } = httpRequest.params
-      const { url } = httpRequest.body
+      const { message } = httpRequest.body
       const feed = await this.loadFeedById.loadById(feedId)
       if (feed) {
-        if (!url) {
-          return missing(new MissingParamError('url'))
+        if (!message) {
+          return missing(new MissingParamError('message'))
         }
       } else {
         return forbidden(new InvalidParamError('feedId'))

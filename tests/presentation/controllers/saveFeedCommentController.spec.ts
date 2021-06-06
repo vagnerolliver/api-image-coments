@@ -14,7 +14,7 @@ const makeFakeRequest = (): HttpRequest => ({
     feedId: 'any_feed_id'
   },
   body: {
-    url: 'any_url'
+    message: 'any_message'
   }
 })
 
@@ -78,9 +78,9 @@ describe('SaveFeedCommment Controller', () => {
         feedId: 'any_feed_id'
       },
       body: {
-        url: null
+        message: null
       }
     })
-    expect(httpResponse).toEqual(missing(new MissingParamError('url')))
+    expect(httpResponse).toEqual(missing(new MissingParamError('message')))
   })
 })
