@@ -18,8 +18,8 @@ export class SaveFeedCommentController implements Controller {
       } else {
         return forbidden(new InvalidParamError('feedId'))
       }
-    } catch {
-      return serverError(new Error())
+    } catch (error) {
+      return serverError(error)
     }
   }
 }
