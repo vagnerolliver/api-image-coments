@@ -1,12 +1,13 @@
 import { forbidden, serverError, missing } from '@/presentation/helpers/httpHelper'
 import { InvalidParamError, MissingParamError } from '@/presentation/errors'
 import { SaveFeedCommentController } from '@/presentation/controllers/saveFeedCommentController'
-import { LoadFeedById } from '@/domain/usecases'
+import { LoadFeedById, SaveFeedComment, SaveFeedCommentModel } from '@/domain/usecases'
 import { HttpRequest } from '@/presentation/protocols'
-import { FeedModel } from '@/domain/models'
+import { FeedModel, FeedCommentModel } from '@/domain/models'
+import MockDate from 'mockdate'
 
-const makeSaveFeedCommentController = (loadFeedById: LoadFeedById): SaveFeedCommentController => {
-  return new SaveFeedCommentController(loadFeedById)
+const makeSaveFeedCommentController = (loadFeedById: LoadFeedById, saveFeedComment: SaveFeedComment): SaveFeedCommentController => {
+  return new SaveFeedCommentController(loadFeedById, saveFeedComment)
 }
 
 const makeFakeRequest = (): HttpRequest => ({
@@ -34,21 +35,48 @@ const makeLoadFeedById = (): LoadFeedById => {
   return new LoadFeedByIdStub()
 }
 
+const makeFakeFeedComment = (): FeedCommentModel => ({
+  id: 'valid_id',
+  feedId: 'valid_feed_id',
+  date: new Date(),
+  message: 'valid_message'
+})
+
+const makeSaveFeedComment = (): SaveFeedComment => {
+  class SaveFeedCommentStub implements SaveFeedComment {
+    async save (data: SaveFeedCommentModel): Promise<FeedCommentModel> {
+      return new Promise(resolve => resolve(makeFakeFeedComment()))
+    }
+  }
+  return new SaveFeedCommentStub()
+}
+
 type SutTypes = {
   sut: SaveFeedCommentController
   loadFeedByIdStub: LoadFeedById
+  saveFeedCommentStub: SaveFeedComment
 }
 
 const makeSut = (): SutTypes => {
   const loadFeedByIdStub = makeLoadFeedById()
-  const sut = makeSaveFeedCommentController(loadFeedByIdStub)
+  const saveFeedCommentStub = makeSaveFeedComment()
+  const sut = makeSaveFeedCommentController(loadFeedByIdStub, saveFeedCommentStub)
   return {
     loadFeedByIdStub,
+    saveFeedCommentStub,
     sut
   }
 }
 
 describe('SaveFeedCommment Controller', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   test('Should call LoadFeedById with correct values', async () => {
     const { sut, loadFeedByIdStub } = makeSut()
     const loadByIdSpy = jest.spyOn(loadFeedByIdStub, 'loadById')
@@ -82,5 +110,16 @@ describe('SaveFeedCommment Controller', () => {
       }
     })
     expect(httpResponse).toEqual(missing(new MissingParamError('message')))
+  })
+
+  test('Should call SaveFeedComment with correct values', async () => {
+    const { sut, saveFeedCommentStub } = makeSut()
+    const saveSpy = jest.spyOn(saveFeedCommentStub, 'save')
+    await sut.handle(makeFakeRequest())
+    expect(saveSpy).toHaveBeenCalledWith({
+      feedId: 'any_feed_id',
+      message: 'any_message',
+      date: new Date()
+    })
   })
 })
